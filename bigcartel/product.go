@@ -14,9 +14,27 @@ func (c *Client) GetProducts() ([]types.Product, error) {
 		return nil, err
 	}
 
-	var products []types.Product
-	if err := json.Unmarshal(respBody, &products); err != nil {
+	var productResponse types.ProductResponse
+	if err := json.Unmarshal(respBody, &productResponse); err != nil {
 		return nil, err
+	}
+
+	products := make([]types.Product, len(productResponse.Data))
+	for i, p := range productResponse.Data {
+		products[i] = types.Product{
+			ID:              p.ID,
+			Name:            p.Attributes.Name,
+			Permalink:       p.Attributes.Permalink,
+			Status:          p.Attributes.Status,
+			Description:     p.Attributes.Description,
+			CreatedAt:       p.Attributes.CreatedAt,
+			UpdatedAt:       p.Attributes.UpdatedAt,
+			DefaultPrice:    p.Attributes.DefaultPrice,
+			OnSale:          p.Attributes.OnSale,
+			Position:        p.Attributes.Position,
+			URL:             p.Attributes.URL,
+			PrimaryImageURL: p.Attributes.PrimaryImageURL,
+		}
 	}
 
 	return products, nil
