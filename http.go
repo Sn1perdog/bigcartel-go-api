@@ -9,7 +9,7 @@ import (
 )
 
 // doRequest is a helper method to handle HTTP requests and responses
-func (c *Client) doRequest(method, url string, body interface{}) ([]byte, error) {
+func (c *Client) doRequest(method, endpoint string, body interface{}) ([]byte, error) {
 	var reqBody io.Reader
 	if body != nil {
 		jsonData, err := json.Marshal(body)
@@ -19,14 +19,18 @@ func (c *Client) doRequest(method, url string, body interface{}) ([]byte, error)
 		reqBody = bytes.NewBuffer(jsonData)
 	}
 
-	req, err := http.NewRequest(method, url, reqBody)
+	req, err := http.NewRequest(method, c.BaseURL+endpoint, reqBody)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Authorization", "Bearer "+c.APIToken)
+
+	req.Header.Set("Accept", "application/vnd.api+json")
+	req.Header.Set("User-Agent", c.UserAgent1)
+	req.Header.Add("User-Agent", c.UserAgent2)
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
+	req.SetBasicAuth(c.Username, c.Password)
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
