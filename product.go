@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"bigcartel/types"
+	"github.com/Sn1perdog/bigcartel-go-api/types"
 )
 
 // GetProducts retrieves products from BigCartel
