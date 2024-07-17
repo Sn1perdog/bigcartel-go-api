@@ -5,7 +5,6 @@ import (
 )
 
 type Client struct {
-	APIToken   string
 	HTTPClient *http.Client
 	BaseURL    string
 	UserAgent1 string
@@ -14,9 +13,8 @@ type Client struct {
 	Password   string
 }
 
-func NewClient(apiToken, accountNumber, userAgent1, userAgent2, username, password string) *Client {
+func NewClient(accountNumber, userAgent1, userAgent2, username, password string) *Client {
 	return &Client{
-		APIToken:   apiToken,
 		HTTPClient: &http.Client{},
 		BaseURL:    "https://api.bigcartel.com/v1/accounts/" + accountNumber,
 		UserAgent1: userAgent1,
