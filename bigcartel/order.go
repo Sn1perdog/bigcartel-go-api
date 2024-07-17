@@ -2,7 +2,6 @@ package bigcartel
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/Sn1perdog/bigcartel-go-api/types"
 )
@@ -18,7 +17,7 @@ GetOrders retrieves all orders from BigCartel
 		Example: `-created_at`
 */
 func (c *Client) GetOrders(search, filter, sort string) ([]types.Order, error) {
-	url := fmt.Sprintf("%s/orders", c.BaseURL)
+	url := "/orders"
 
 	if search != "" || filter != "" || sort != "" {
 		q := url + "?"

@@ -2,14 +2,13 @@ package bigcartel
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/Sn1perdog/bigcartel-go-api/types"
 )
 
 // GetProducts retrieves products from BigCartel
 func (c *Client) GetProducts() ([]types.Product, error) {
-	url := fmt.Sprintf("%s/products", c.BaseURL)
+	url := "/products"
 	respBody, err := c.doRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -25,7 +24,7 @@ func (c *Client) GetProducts() ([]types.Product, error) {
 
 // CreateProduct creates a new product in BigCartel
 func (c *Client) CreateProduct(product types.Product) (*types.Product, error) {
-	url := fmt.Sprintf("%s/products", c.BaseURL)
+	url := "/products"
 	respBody, err := c.doRequest("POST", url, product)
 	if err != nil {
 		return nil, err
