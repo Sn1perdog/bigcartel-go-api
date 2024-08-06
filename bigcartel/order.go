@@ -41,8 +41,6 @@ func (c *Client) GetOrders(search, filter, sort string) ([]types.OrderDetail, er
 		return nil, fmt.Errorf("failed to perform GET request to %s: %w", url, err)
 	}
 
-	log.Printf("Response: %s", string(respBody))
-
 	var orderResponse types.OrderResponse
 	if err := json.Unmarshal(respBody, &orderResponse); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal order response: %w", err)
@@ -78,13 +76,18 @@ func (c *Client) GetOrders(search, filter, sort string) ([]types.OrderDetail, er
 			}
 		}
 
+		shippingAddress2 := ""
+		if order.Attributes.ShippingAddress2 != nil {
+			shippingAddress2 = *order.Attributes.ShippingAddress2
+		}
+
 		orderDetail := types.OrderDetail{
 			OrderID:           order.ID,
 			CustomerFirstName: order.Attributes.CustomerFirstName,
 			CustomerLastName:  order.Attributes.CustomerLastName,
 			CustomerEmail:     order.Attributes.CustomerEmail,
 			ShippingAddress1:  order.Attributes.ShippingAddress1,
-			ShippingAddress2:  *order.Attributes.ShippingAddress2,
+			ShippingAddress2:  shippingAddress2,
 			ShippingCity:      order.Attributes.ShippingCity,
 			ShippingState:     order.Attributes.ShippingState,
 			ShippingZip:       order.Attributes.ShippingZip,
