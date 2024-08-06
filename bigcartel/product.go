@@ -2,6 +2,8 @@ package bigcartel
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 
 	"github.com/Sn1perdog/bigcartel-go-api/types"
 )
@@ -11,12 +13,13 @@ func (c *Client) GetProducts() ([]types.Product, error) {
 	url := "/products"
 	respBody, err := c.doRequest("GET", url, nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to perform GET request to %s: %w", url, err)
 	}
 
 	var productResponse types.ProductResponse
 	if err := json.Unmarshal(respBody, &productResponse); err != nil {
-		return nil, err
+		log.Printf("Failed to unmarshal response: %s\n", string(respBody))
+		return nil, fmt.Errorf("failed to unmarshal response from %s: %w", url, err)
 	}
 
 	products := make([]types.Product, len(productResponse.Data))
