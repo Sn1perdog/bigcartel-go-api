@@ -118,6 +118,32 @@ func (c *Client) GetOrders(search, filter, sort string) ([]types.OrderDetail, er
 	return orderDetails, nil
 }
 
+// Retrieve singular order by orderId
+func (c *Client) GetOrder(orderId string) (*types.OrderDetail, error) {
+	url := "/orders/" + orderId
+
+	respBody, err := c.doRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to perform GET request to %s: %w", url, err)
+	}
+
+	var orderResponse types.OrderResponse
+	if err := json.Unmarshal(respBody, &orderResponse); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal order response: %w", err)
+	}
+
+	orderDetails, err := mapOrderDetails([]types.OrderData{orderResponse.Data}, orderResponse.Included)
+	if err != nil {
+		return nil, fmt.Errorf("failed to map order details: %w", err)
+	}
+
+	if len(orderDetails) > 0 {
+		return &orderDetails[0], nil
+	}
+
+	return nil, fmt.Errorf("order not found")
+}
+
 // UpdateOrder updates an existing order in BigCartel
 func (c *Client) UpdateOrder(orderID string, updateData types.OrderUpdateAttributes) (*types.OrderDetail, error) {
 	url := fmt.Sprintf("/orders/%s", orderID)
