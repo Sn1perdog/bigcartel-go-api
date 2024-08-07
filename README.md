@@ -70,8 +70,7 @@ func main() {
 		fmt.Printf("Product ID: %s, Name: %s, Price: %s\n", p.ID, p.Name, p.DefaultPrice)
 	}
 
-	// Get Orders, includes the products ordered in the []ProductsPurchased
-	// See GetOrders docs for options
+	// Get all shipped Orders
 	orders, err := client.GetOrders("", "[shipping_status]=shipped", "")
 	if err != nil {
 		log.Fatalf("Error fetching orders: %v", err)
@@ -80,5 +79,26 @@ func main() {
 	for _, o := range orders {
 		fmt.Printf("Order ID: %s, Customer: %s %s, Item ordered: %s, Shipment status: %s\n", o.OrderID, o.CustomerFirstName, o.CustomerLastName, o.ProductsPurchased[0].ProductName, o.ShippingStatus)
 	}
+ 
+	// order id used for update and get
+	orderID := "SLFZ-875364"
+	// Update Order, returns order with updated fields
+	newNote := "Customer likes french fries"
+	updateData := types.OrderUpdateAttributes{
+		ShippingAddress1: &newNote,
+	}
+	updatedOrder, err := client.UpdateOrder(orderID, updateData)
+	if err != nil {
+		log.Fatalf("Error updating order: %v", err)
+	}
+	fmt.Printf("Updated Order ID: %s, New note: %s\n", updatedOrder.OrderID, updatedOrder.CustomerNote)
+
+	// Get single Order
+	order, err := client.GetOrder(orderID)
+	if err != nil {
+		log.Fatalf("Error fetching order: %v", err)
+	}
+	fmt.Printf("Order ID: %s, Customer: %s %s, Item ordered: %s, Shipment status: %s\n", order.OrderID, order.CustomerFirstName, order.CustomerLastName, order.ProductsPurchased[0].ProductName, order.ShippingStatus)
 }
+
 ```
