@@ -28,7 +28,7 @@ func (c *Client) doRequest(method, endpoint string, body interface{}) ([]byte, e
 	req.Header.Set("User-Agent", c.UserAgent1)
 	req.Header.Add("User-Agent", c.UserAgent2)
 	if body != nil {
-		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Content-Type", "application/vnd.api+json")
 	}
 	req.SetBasicAuth(c.Username, c.Password)
 

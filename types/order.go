@@ -6,8 +6,12 @@ import (
 )
 
 // OrderResponse represents the full JSON response for orders
-type OrderResponse struct {
+type OrdersResponse struct {
 	Data     []OrderData    `json:"data"`
+	Included []IncludedData `json:"included"`
+}
+type OrderResponse struct {
+	Data     OrderData      `json:"data"`
 	Included []IncludedData `json:"included"`
 }
 
