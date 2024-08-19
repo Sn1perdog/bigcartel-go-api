@@ -1,5 +1,6 @@
 # Big Cartel Go API
-Still WIP, Products and Orders with their respective Products can be retrieved.
+This Go library provides an easy-to-use interface for interacting with the Big Cartel API, allowing you to manage products, orders, and more within your Big Cartel store programmatically.
+
 [Bigcartel API docs](https://developers.bigcartel.com/api/v1)
 # Example usage
 Using .env file to store credentials information, we create a Bigcartel client through which we can perform requests and view order information.
